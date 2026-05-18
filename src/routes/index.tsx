@@ -1,46 +1,23 @@
 import React from 'react'
+import ReactDOM from 'react-dom/client'
 
-export default function Home() {
+function App() {
   return (
     <main
       style={{
         minHeight: '100vh',
-        background:
-          'linear-gradient(135deg,#f8fbff 0%,#edf4ff 40%,#dbeafe 100%)',
-        fontFamily: 'Arial',
-        color: '#08142b',
-        overflow: 'hidden',
+        background: 'linear-gradient(135deg, #f7fbff 0%, #eaf4ff 45%, #ffffff 100%)',
+        color: '#061b3a',
+        fontFamily: 'Arial, sans-serif',
+        padding: '48px 56px',
       }}
     >
-      {/* HEADER */}
-      <header
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '28px 50px',
-          backdropFilter: 'blur(14px)',
-        }}
-      >
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1
-            style={{
-              margin: 0,
-              fontSize: '34px',
-              fontWeight: 800,
-              color: '#0b3b8f',
-            }}
-          >
-            NexxGuard Pro™
+          <h1 style={{ fontSize: '56px', color: '#0b45a0', margin: 0 }}>
+            NexxGuard Pro™ 🚀
           </h1>
-
-          <p
-            style={{
-              marginTop: '8px',
-              color: '#64748b',
-              fontSize: '16px',
-            }}
-          >
+          <p style={{ fontSize: '24px', color: '#51657f' }}>
             Optimisez votre quotidien. Naturellement.
           </p>
         </div>
@@ -48,48 +25,18 @@ export default function Home() {
         <div
           style={{
             background: 'white',
-            borderRadius: '18px',
-            padding: '14px 24px',
-            boxShadow: '0 10px 30px rgba(37,99,235,0.12)',
-            border: '1px solid rgba(255,255,255,0.8)',
+            padding: '24px 34px',
+            borderRadius: '24px',
+            boxShadow: '0 20px 60px rgba(20,80,160,0.14)',
           }}
         >
-          <div
-            style={{
-              fontSize: '13px',
-              color: '#64748b',
-            }}
-          >
-            SMART SCORE
-          </div>
-
-          <div
-            style={{
-              fontSize: '28px',
-              fontWeight: 'bold',
-              color: '#d4af37',
-            }}
-          >
-            92%
-          </div>
+          <p style={{ margin: 0, color: '#53657d', fontSize: '18px' }}>SMART SCORE</p>
+          <strong style={{ fontSize: '38px', color: '#d7a928' }}>92%</strong>
         </div>
       </header>
 
-      {/* HERO */}
-      <section
-        style={{
-          textAlign: 'center',
-          padding: '70px 25px 50px',
-        }}
-      >
-        <h2
-          style={{
-            fontSize: 'clamp(48px,8vw,82px)',
-            marginBottom: '20px',
-            lineHeight: 1,
-            color: '#08142b',
-          }}
-        >
+      <section style={{ textAlign: 'center', marginTop: '190px' }}>
+        <h2 style={{ fontSize: '76px', lineHeight: 1.05, margin: 0, color: '#020b1f' }}>
           Nouvelle génération
           <br />
           d’organisation intelligente
@@ -97,195 +44,114 @@ export default function Home() {
 
         <p
           style={{
-            maxWidth: '850px',
-            margin: '0 auto',
-            fontSize: '22px',
-            color: '#475569',
-            lineHeight: 1.5,
+            fontSize: '30px',
+            color: '#3f5570',
+            maxWidth: '1050px',
+            margin: '40px auto',
+            lineHeight: 1.45,
           }}
         >
           Une plateforme évolutive conçue pour améliorer votre concentration,
-          simplifier votre gestion quotidienne et optimiser naturellement
-          vos priorités.
+          simplifier votre gestion quotidienne et optimiser naturellement vos priorités.
         </p>
 
         <button
           style={{
-            marginTop: '35px',
-            background:
-              'linear-gradient(135deg,#2563eb,#0f172a)',
-            color: 'white',
+            marginTop: '25px',
+            padding: '26px 58px',
             border: 'none',
-            borderRadius: '18px',
-            padding: '18px 34px',
-            fontSize: '18px',
+            borderRadius: '24px',
+            fontSize: '28px',
             fontWeight: 'bold',
+            color: 'white',
+            background: 'linear-gradient(135deg, #2e63dc, #071b46)',
+            boxShadow: '0 25px 70px rgba(46,99,220,0.35)',
             cursor: 'pointer',
-            boxShadow: '0 12px 40px rgba(37,99,235,0.35)',
           }}
         >
           Découvrir l’expérience
         </button>
       </section>
 
-      {/* CARDS */}
       <section
         style={{
           display: 'grid',
-          gridTemplateColumns:
-            'repeat(auto-fit,minmax(250px,1fr))',
-          gap: '24px',
-          padding: '40px',
-          maxWidth: '1400px',
-          margin: '0 auto',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: '30px',
+          marginTop: '130px',
         }}
       >
         {[
-          {
-            title: 'Focus Mode',
-            value: 'Actif',
-            color: '#2563eb',
-          },
-          {
-            title: 'Temps optimisé',
-            value: '+3h',
-            color: '#d4af37',
-          },
-          {
-            title: 'Organisation',
-            value: 'Synchronisée',
-            color: '#0f172a',
-          },
-          {
-            title: 'Assistant central',
-            value: 'Disponible',
-            color: '#2563eb',
-          },
-        ].map((card, index) => (
+          ['01', 'Profil personnalisé', 'Comprendre vos besoins et votre rythme.'],
+          ['02', 'Priorités claires', 'Classer ce qui compte vraiment.'],
+          ['03', 'Horaire dynamique', 'Structurer vos journées avec fluidité.'],
+          ['04', 'Évolution continue', 'Améliorer votre organisation étape par étape.'],
+        ].map(([num, title, text]) => (
           <div
-            key={index}
+            key={num}
             style={{
-              background: 'rgba(255,255,255,0.75)',
-              borderRadius: '28px',
-              padding: '28px',
-              backdropFilter: 'blur(18px)',
-              border: '1px solid rgba(255,255,255,0.8)',
-              boxShadow:
-                '0 15px 45px rgba(37,99,235,0.08)',
+              background: 'rgba(255,255,255,0.85)',
+              padding: '34px',
+              borderRadius: '30px',
+              boxShadow: '0 20px 70px rgba(30,80,160,0.12)',
+              border: '1px solid rgba(255,255,255,0.9)',
             }}
           >
-            <div
-              style={{
-                color: '#64748b',
-                marginBottom: '12px',
-              }}
-            >
-              {card.title}
-            </div>
-
-            <div
-              style={{
-                fontSize: '32px',
-                fontWeight: 'bold',
-                color: card.color,
-              }}
-            >
-              {card.value}
-            </div>
+            <strong style={{ fontSize: '22px', color: '#d7a928' }}>{num}</strong>
+            <h3 style={{ fontSize: '28px', color: '#0b45a0' }}>{title}</h3>
+            <p style={{ fontSize: '20px', color: '#52657b', lineHeight: 1.4 }}>{text}</p>
           </div>
         ))}
       </section>
 
-      {/* SMART ENGINE */}
       <section
         style={{
-          maxWidth: '1300px',
-          margin: '60px auto',
-          padding: '50px',
+          marginTop: '90px',
+          background: '#071b46',
+          color: 'white',
+          borderRadius: '38px',
+          padding: '55px',
+          boxShadow: '0 30px 90px rgba(7,27,70,0.25)',
         }}
       >
+        <h2 style={{ fontSize: '44px', marginTop: 0 }}>
+          Tableau de bord évolutif
+        </h2>
+
         <div
           style={{
-            background:
-              'linear-gradient(135deg,#0f172a,#0b3b8f)',
-            borderRadius: '36px',
-            padding: '60px',
-            color: 'white',
-            position: 'relative',
-            overflow: 'hidden',
-            boxShadow:
-              '0 25px 60px rgba(15,23,42,0.35)',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, 1fr)',
+            gap: '24px',
+            marginTop: '35px',
           }}
         >
-          <div
-            style={{
-              position: 'absolute',
-              right: '-120px',
-              top: '-120px',
-              width: '320px',
-              height: '320px',
-              borderRadius: '50%',
-              background:
-                'rgba(255,215,0,0.15)',
-              filter: 'blur(20px)',
-            }}
-          />
-
-          <h2
-            style={{
-              fontSize: '52px',
-              marginTop: 0,
-              marginBottom: '20px',
-            }}
-          >
-            SMART Engine™
-          </h2>
-
-          <p
-            style={{
-              fontSize: '22px',
-              lineHeight: 1.7,
-              maxWidth: '900px',
-              color: '#dbeafe',
-            }}
-          >
-            Une technologie évolutive qui adapte votre organisation,
-            vos priorités et votre rythme quotidien afin
-            d’améliorer naturellement votre efficacité.
-          </p>
-
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '16px',
-              marginTop: '40px',
-            }}
-          >
-            {[
-              'Analyse adaptative',
-              'Organisation dynamique',
-              'Priorités intelligentes',
-              'Focus évolutif',
-              'Performance quotidienne',
-            ].map((item) => (
-              <div
-                key={item}
-                style={{
-                  background:
-                    'rgba(255,255,255,0.08)',
-                  borderRadius: '16px',
-                  padding: '16px 22px',
-                  border:
-                    '1px solid rgba(255,255,255,0.12)',
-                }}
-              >
-                {item}
-              </div>
-            ))}
-          </div>
+          {[
+            ['Focus actif', 'Organisation en cours'],
+            ['Temps optimisé', '+3h estimées'],
+            ['Progression', 'Phase visuelle active'],
+          ].map(([title, value]) => (
+            <div
+              key={title}
+              style={{
+                background: 'rgba(255,255,255,0.1)',
+                border: '1px solid rgba(255,255,255,0.18)',
+                borderRadius: '26px',
+                padding: '30px',
+              }}
+            >
+              <p style={{ fontSize: '20px', color: '#c9d8ff' }}>{title}</p>
+              <strong style={{ fontSize: '34px', color: '#ffffff' }}>{value}</strong>
+            </div>
+          ))}
         </div>
       </section>
     </main>
   )
 }
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
