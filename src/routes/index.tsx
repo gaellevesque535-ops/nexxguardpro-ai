@@ -1,92 +1,126 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 
-function App() {
-  const cards = [
-    { title: 'SMART Score', value: '92%', text: 'Progression quotidienne optimisée' },
-    { title: 'Focus actif', value: 'En cours', text: 'Priorités organisées naturellement' },
-    { title: 'Temps gagné', value: '+3h', text: 'Routine simplifiée cette semaine' },
-    { title: 'Assistant', value: 'Actif', text: 'Accompagnement en temps réel' },
-  ]
+type Task = {
+  id: number
+  title: string
+  urgency: number
+  importance: number
+  duration: number
+}
 
-  const steps = [
-    'Analyse des besoins',
-    'Choix des priorités',
-    'Planification dynamique',
-    'Horaires personnalisés',
-    'Suivi quotidien',
-    'Évolution du profil',
-  ]
+function App() {
+  const [energy, setEnergy] = useState(70)
+  const [focus, setFocus] = useState(65)
+  const [tasks, setTasks] = useState<Task[]>([
+    { id: 1, title: 'Planifier ma journée', urgency: 80, importance: 90, duration: 30 },
+    { id: 2, title: 'Répondre aux messages importants', urgency: 70, importance: 60, duration: 25 },
+    { id: 3, title: 'Préparer une tâche prioritaire', urgency: 55, importance: 95, duration: 45 },
+  ])
+
+  const smartScore = useMemo(() => {
+    const avgPriority =
+      tasks.reduce((acc, t) => acc + (t.urgency + t.importance) / 2, 0) / tasks.length
+
+    return Math.round((avgPriority * 0.5 + energy * 0.25 + focus * 0.25))
+  }, [tasks, energy, focus])
+
+  const recommendation = useMemo(() => {
+    if (energy < 40) return 'Commence par une tâche courte pour relancer ton rythme.'
+    if (focus < 50) return 'Évite les tâches lourdes. Fais un bloc simple de 25 minutes.'
+    if (smartScore >= 85) return 'Bonne fenêtre de concentration : attaque une tâche importante.'
+    return 'Priorise une tâche claire, puis ajuste ton horaire.'
+  }, [energy, focus, smartScore])
+
+  const addTask = () => {
+    const title = prompt('Nouvelle tâche :')
+    if (!title) return
+
+    setTasks([
+      ...tasks,
+      {
+        id: Date.now(),
+        title,
+        urgency: 50,
+        importance: 70,
+        duration: 30,
+      },
+    ])
+  }
+
+  const priorityLabel = (task: Task) => {
+    if (task.urgency >= 70 && task.importance >= 70) return 'Important + urgent'
+    if (task.urgency < 70 && task.importance >= 70) return 'Important'
+    if (task.urgency >= 70 && task.importance < 70) return 'Urgent'
+    return 'À placer plus tard'
+  }
 
   return (
     <main style={styles.page}>
-      <header style={styles.header}>
+      <section style={styles.hero}>
         <div>
           <h1 style={styles.logo}>NexxGuard Pro™</h1>
           <p style={styles.tagline}>Optimisez votre quotidien. Naturellement.</p>
         </div>
 
-        <div style={styles.scoreBox}>
-          <span style={styles.scoreLabel}>SMART SCORE</span>
-          <strong style={styles.score}>92%</strong>
+        <div style={styles.scoreCard}>
+          <span style={styles.label}>SMART SCORE</span>
+          <strong style={styles.score}>{smartScore}%</strong>
         </div>
-      </header>
+      </section>
 
-      <section style={styles.hero}>
-        <div style={styles.badge}>Phase visuelle active</div>
-        <h2 style={styles.title}>Nouvelle génération d’organisation intelligente</h2>
+      <section style={styles.center}>
+        <span style={styles.badge}>Dashboard intelligent actif</span>
+        <h2 style={styles.title}>Votre espace d’organisation évolutif</h2>
         <p style={styles.subtitle}>
-          Une plateforme évolutive conçue pour améliorer votre concentration,
-          simplifier votre gestion quotidienne et optimiser naturellement vos priorités.
+          Analyse des priorités, rythme personnel, tâches, horaires dynamiques et recommandations en temps réel.
         </p>
-        <button style={styles.button}>Découvrir l’expérience</button>
       </section>
 
-      <section style={styles.cards}>
-        {cards.map((card) => (
-          <article key={card.title} style={styles.card}>
-            <h3 style={styles.cardTitle}>{card.title}</h3>
-            <strong style={styles.cardValue}>{card.value}</strong>
-            <p style={styles.cardText}>{card.text}</p>
-          </article>
-        ))}
+      <section style={styles.grid}>
+        <div style={styles.card}>
+          <h3>Énergie</h3>
+          <strong>{energy}%</strong>
+          <input type="range" min="0" max="100" value={energy} onChange={(e) => setEnergy(Number(e.target.value))} />
+        </div>
+
+        <div style={styles.card}>
+          <h3>Concentration</h3>
+          <strong>{focus}%</strong>
+          <input type="range" min="0" max="100" value={focus} onChange={(e) => setFocus(Number(e.target.value))} />
+        </div>
+
+        <div style={styles.card}>
+          <h3>Recommandation</h3>
+          <p>{recommendation}</p>
+        </div>
+
+        <div style={styles.card}>
+          <h3>Horaire optimisé</h3>
+          <strong>{tasks.reduce((acc, t) => acc + t.duration, 0)} min</strong>
+          <p>Temps estimé organisé automatiquement.</p>
+        </div>
       </section>
 
-      <section style={styles.timelineSection}>
-        <h2 style={styles.sectionTitle}>Évolution du logiciel</h2>
-        <p style={styles.sectionText}>
-          Chaque étape ajoute une nouvelle couche d’organisation, d’analyse et d’autonomie.
-        </p>
+      <section style={styles.panel}>
+        <div style={styles.panelHeader}>
+          <h2>Priorités du jour</h2>
+          <button style={styles.button} onClick={addTask}>+ Ajouter une tâche</button>
+        </div>
 
-        <div style={styles.steps}>
-          {steps.map((step, index) => (
-            <div key={step} style={styles.step}>
-              <span style={styles.stepNumber}>0{index + 1}</span>
-              <h3 style={styles.stepTitle}>{step}</h3>
-              <p style={styles.stepText}>
-                Module progressif intégré au dashboard.
-              </p>
+        <div style={styles.taskList}>
+          {tasks.map((task) => (
+            <div key={task.id} style={styles.task}>
+              <div>
+                <strong>{task.title}</strong>
+                <p>{priorityLabel(task)} · {task.duration} min</p>
+              </div>
+
+              <div style={styles.miniScore}>
+                {Math.round((task.urgency + task.importance) / 2)}%
+              </div>
             </div>
           ))}
-        </div>
-      </section>
-
-      <section style={styles.preview}>
-        <div>
-          <h2 style={styles.previewTitle}>Dashboard évolutif</h2>
-          <p style={styles.previewText}>
-            Vision claire, progression visible, outils structurés et expérience premium.
-          </p>
-        </div>
-
-        <div style={styles.panel}>
-          <div style={styles.panelLine}></div>
-          <div style={styles.panelLineShort}></div>
-          <div style={styles.panelGrid}>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
         </div>
       </section>
     </main>
@@ -99,193 +133,109 @@ const styles: Record<string, React.CSSProperties> = {
     background: 'linear-gradient(135deg, #f7fbff 0%, #eaf4ff 45%, #ffffff 100%)',
     color: '#061b3a',
     fontFamily: 'Arial, sans-serif',
-    padding: '48px 56px',
+    padding: '56px',
   },
-  header: {
+  hero: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: '120px',
   },
   logo: {
-    fontSize: '52px',
-    color: '#0b469f',
+    fontSize: '56px',
+    color: '#0b46a0',
     margin: 0,
-    fontWeight: 800,
   },
   tagline: {
     fontSize: '24px',
-    color: '#5a6d86',
-    marginTop: '14px',
+    color: '#56708f',
   },
-  scoreBox: {
+  scoreCard: {
     background: 'white',
     borderRadius: '28px',
-    padding: '24px 38px',
-    boxShadow: '0 25px 60px rgba(40, 100, 180, 0.16)',
+    padding: '28px 38px',
+    boxShadow: '0 25px 60px rgba(35, 95, 180, 0.18)',
   },
-  scoreLabel: {
+  label: {
+    color: '#52657d',
     display: 'block',
-    color: '#586b85',
-    fontSize: '20px',
   },
   score: {
-    color: '#d6a923',
-    fontSize: '42px',
+    color: '#d6a720',
+    fontSize: '46px',
   },
-  hero: {
+  center: {
     textAlign: 'center',
-    maxWidth: '1180px',
-    margin: '0 auto 90px',
+    marginTop: '120px',
   },
   badge: {
-    display: 'inline-block',
     background: 'white',
-    color: '#0b469f',
-    padding: '12px 24px',
+    padding: '14px 34px',
     borderRadius: '999px',
-    marginBottom: '28px',
-    boxShadow: '0 12px 35px rgba(13, 70, 150, 0.12)',
+    color: '#0b46a0',
     fontWeight: 700,
+    boxShadow: '0 18px 45px rgba(35, 95, 180, 0.14)',
   },
   title: {
-    fontSize: '82px',
-    lineHeight: 1.08,
-    margin: 0,
-    color: '#06152f',
-    fontWeight: 900,
+    fontSize: '72px',
+    marginBottom: '18px',
   },
   subtitle: {
-    fontSize: '31px',
-    lineHeight: 1.45,
-    color: '#40536d',
-    maxWidth: '1020px',
-    margin: '36px auto',
+    fontSize: '25px',
+    color: '#405b7d',
+    maxWidth: '950px',
+    margin: '0 auto',
   },
-  button: {
-    border: 'none',
-    borderRadius: '24px',
-    padding: '24px 54px',
-    fontSize: '28px',
-    fontWeight: 800,
-    color: 'white',
-    background: 'linear-gradient(135deg, #2f68e8, #122b61)',
-    boxShadow: '0 20px 45px rgba(47, 104, 232, 0.28)',
-    cursor: 'pointer',
-  },
-  cards: {
+  grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: '30px',
-    marginBottom: '100px',
+    gap: '28px',
+    marginTop: '80px',
   },
   card: {
     background: 'white',
-    borderRadius: '32px',
-    padding: '38px',
-    minHeight: '210px',
-    boxShadow: '0 25px 70px rgba(30, 90, 160, 0.12)',
+    borderRadius: '28px',
+    padding: '32px',
+    minHeight: '170px',
+    boxShadow: '0 25px 60px rgba(35, 95, 180, 0.12)',
   },
-  cardTitle: {
-    fontSize: '26px',
-    color: '#0b469f',
-    marginBottom: '30px',
-  },
-  cardValue: {
-    display: 'block',
-    fontSize: '44px',
-    color: '#2f68e8',
-    marginBottom: '20px',
-  },
-  cardText: {
-    color: '#60728a',
-    fontSize: '18px',
-  },
-  timelineSection: {
+  panel: {
+    marginTop: '36px',
     background: 'white',
-    borderRadius: '38px',
-    padding: '56px',
-    boxShadow: '0 25px 80px rgba(30, 90, 160, 0.12)',
-    marginBottom: '90px',
+    borderRadius: '32px',
+    padding: '34px',
+    boxShadow: '0 25px 70px rgba(35, 95, 180, 0.14)',
   },
-  sectionTitle: {
-    fontSize: '46px',
-    color: '#0b469f',
-    margin: 0,
-  },
-  sectionText: {
-    fontSize: '23px',
-    color: '#52657d',
-    marginBottom: '38px',
-  },
-  steps: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
-    gap: '24px',
-  },
-  step: {
-    border: '1px solid #dce9f8',
-    borderRadius: '26px',
-    padding: '28px',
-    background: '#f8fbff',
-  },
-  stepNumber: {
-    color: '#d6a923',
-    fontWeight: 900,
-    fontSize: '22px',
-  },
-  stepTitle: {
-    color: '#061b3a',
-    fontSize: '25px',
-  },
-  stepText: {
-    color: '#64758c',
-    fontSize: '17px',
-  },
-  preview: {
+  panelHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    background: 'linear-gradient(135deg, #0b469f, #061b3a)',
+  },
+  button: {
+    border: 'none',
+    borderRadius: '18px',
+    padding: '16px 24px',
+    background: 'linear-gradient(135deg, #2f66db, #102b66)',
     color: 'white',
-    borderRadius: '42px',
-    padding: '60px',
-    boxShadow: '0 30px 90px rgba(6, 27, 58, 0.22)',
+    fontWeight: 700,
+    cursor: 'pointer',
   },
-  previewTitle: {
-    fontSize: '48px',
-    margin: 0,
-  },
-  previewText: {
-    fontSize: '24px',
-    color: '#dbe8ff',
-    maxWidth: '700px',
-  },
-  panel: {
-    width: '360px',
-    background: 'rgba(255,255,255,0.12)',
-    borderRadius: '30px',
-    padding: '30px',
-    border: '1px solid rgba(255,255,255,0.22)',
-  },
-  panelLine: {
-    height: '18px',
-    width: '80%',
-    background: 'white',
-    borderRadius: '999px',
-    marginBottom: '20px',
-  },
-  panelLineShort: {
-    height: '18px',
-    width: '55%',
-    background: '#d6a923',
-    borderRadius: '999px',
-    marginBottom: '28px',
-  },
-  panelGrid: {
+  taskList: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(3, 1fr)',
-    gap: '14px',
+    gap: '16px',
+    marginTop: '24px',
+  },
+  task: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '22px',
+    borderRadius: '22px',
+    background: '#f4f8ff',
+  },
+  miniScore: {
+    color: '#d6a720',
+    fontSize: '28px',
+    fontWeight: 800,
   },
 }
 
