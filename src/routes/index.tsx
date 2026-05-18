@@ -1,126 +1,201 @@
 import React, { useMemo, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 
-type Task = {
-  id: number
-  title: string
-  urgency: number
-  importance: number
-  duration: number
-}
-
 function App() {
-  const [energy, setEnergy] = useState(70)
-  const [focus, setFocus] = useState(65)
-  const [tasks, setTasks] = useState<Task[]>([
-    { id: 1, title: 'Planifier ma journée', urgency: 80, importance: 90, duration: 30 },
-    { id: 2, title: 'Répondre aux messages importants', urgency: 70, importance: 60, duration: 25 },
-    { id: 3, title: 'Préparer une tâche prioritaire', urgency: 55, importance: 95, duration: 45 },
-  ])
+  const [energy, setEnergy] = useState(75)
+  const [focus, setFocus] = useState(68)
+
+  const [goal, setGoal] = useState('Organisation')
+  const [workStyle, setWorkStyle] = useState('Structuré')
+  const [difficulty, setDifficulty] = useState('Moyenne')
 
   const smartScore = useMemo(() => {
-    const avgPriority =
-      tasks.reduce((acc, t) => acc + (t.urgency + t.importance) / 2, 0) / tasks.length
+    let base = 70
 
-    return Math.round((avgPriority * 0.5 + energy * 0.25 + focus * 0.25))
-  }, [tasks, energy, focus])
+    if (goal === 'Performance') base += 8
+    if (goal === 'Concentration') base += 5
+
+    if (workStyle === 'Structuré') base += 6
+    if (workStyle === 'Créatif') base += 3
+
+    if (difficulty === 'Faible') base += 8
+    if (difficulty === 'Élevée') base -= 5
+
+    base += energy * 0.08
+    base += focus * 0.08
+
+    return Math.min(99, Math.round(base))
+  }, [goal, workStyle, difficulty, energy, focus])
 
   const recommendation = useMemo(() => {
-    if (energy < 40) return 'Commence par une tâche courte pour relancer ton rythme.'
-    if (focus < 50) return 'Évite les tâches lourdes. Fais un bloc simple de 25 minutes.'
-    if (smartScore >= 85) return 'Bonne fenêtre de concentration : attaque une tâche importante.'
-    return 'Priorise une tâche claire, puis ajuste ton horaire.'
-  }, [energy, focus, smartScore])
+    if (focus < 50) {
+      return 'Réduction des distractions recommandée.'
+    }
 
-  const addTask = () => {
-    const title = prompt('Nouvelle tâche :')
-    if (!title) return
+    if (energy < 45) {
+      return 'Bloc court conseillé avant une tâche importante.'
+    }
 
-    setTasks([
-      ...tasks,
-      {
-        id: Date.now(),
-        title,
-        urgency: 50,
-        importance: 70,
-        duration: 30,
-      },
-    ])
-  }
+    if (goal === 'Performance') {
+      return 'Fenêtre optimale détectée pour une tâche prioritaire.'
+    }
 
-  const priorityLabel = (task: Task) => {
-    if (task.urgency >= 70 && task.importance >= 70) return 'Important + urgent'
-    if (task.urgency < 70 && task.importance >= 70) return 'Important'
-    if (task.urgency >= 70 && task.importance < 70) return 'Urgent'
-    return 'À placer plus tard'
-  }
+    if (goal === 'Concentration') {
+      return 'Mode focus prolongé recommandé.'
+    }
+
+    return 'Organisation quotidienne optimisée.'
+  }, [goal, focus, energy])
 
   return (
     <main style={styles.page}>
-      <section style={styles.hero}>
+      <header style={styles.header}>
         <div>
           <h1 style={styles.logo}>NexxGuard Pro™</h1>
-          <p style={styles.tagline}>Optimisez votre quotidien. Naturellement.</p>
+          <p style={styles.slogan}>
+            Optimisez votre quotidien. Naturellement.
+          </p>
         </div>
 
         <div style={styles.scoreCard}>
-          <span style={styles.label}>SMART SCORE</span>
+          <span style={styles.scoreLabel}>SMART SCORE</span>
           <strong style={styles.score}>{smartScore}%</strong>
         </div>
-      </section>
+      </header>
 
-      <section style={styles.center}>
-        <span style={styles.badge}>Dashboard intelligent actif</span>
-        <h2 style={styles.title}>Votre espace d’organisation évolutif</h2>
+      <section style={styles.hero}>
+        <span style={styles.badge}>Phase intelligente active</span>
+
+        <h2 style={styles.title}>
+          Nouvelle génération
+          <br />
+          d’organisation évolutive
+        </h2>
+
         <p style={styles.subtitle}>
-          Analyse des priorités, rythme personnel, tâches, horaires dynamiques et recommandations en temps réel.
+          Analyse comportementale, adaptation du rythme,
+          optimisation dynamique des priorités et assistance active.
         </p>
       </section>
 
       <section style={styles.grid}>
         <div style={styles.card}>
-          <h3>Énergie</h3>
-          <strong>{energy}%</strong>
-          <input type="range" min="0" max="100" value={energy} onChange={(e) => setEnergy(Number(e.target.value))} />
+          <h3>Énergie actuelle</h3>
+          <strong style={styles.value}>{energy}%</strong>
+
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={energy}
+            onChange={(e) => setEnergy(Number(e.target.value))}
+          />
         </div>
 
         <div style={styles.card}>
           <h3>Concentration</h3>
-          <strong>{focus}%</strong>
-          <input type="range" min="0" max="100" value={focus} onChange={(e) => setFocus(Number(e.target.value))} />
+          <strong style={styles.value}>{focus}%</strong>
+
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={focus}
+            onChange={(e) => setFocus(Number(e.target.value))}
+          />
         </div>
 
         <div style={styles.card}>
-          <h3>Recommandation</h3>
-          <p>{recommendation}</p>
+          <h3>Analyse active</h3>
+
+          <p style={styles.analysis}>
+            {recommendation}
+          </p>
         </div>
 
         <div style={styles.card}>
-          <h3>Horaire optimisé</h3>
-          <strong>{tasks.reduce((acc, t) => acc + t.duration, 0)} min</strong>
-          <p>Temps estimé organisé automatiquement.</p>
+          <h3>Mode système</h3>
+
+          <strong style={styles.active}>Actif</strong>
+
+          <p style={styles.small}>
+            Optimisation en temps réel.
+          </p>
         </div>
       </section>
 
       <section style={styles.panel}>
         <div style={styles.panelHeader}>
-          <h2>Priorités du jour</h2>
-          <button style={styles.button} onClick={addTask}>+ Ajouter une tâche</button>
+          <h2>Profil utilisateur</h2>
+          <span style={styles.live}>Analyse en direct</span>
         </div>
 
-        <div style={styles.taskList}>
-          {tasks.map((task) => (
-            <div key={task.id} style={styles.task}>
-              <div>
-                <strong>{task.title}</strong>
-                <p>{priorityLabel(task)} · {task.duration} min</p>
-              </div>
+        <div style={styles.questionGrid}>
+          <div style={styles.questionCard}>
+            <label>Objectif principal</label>
 
-              <div style={styles.miniScore}>
-                {Math.round((task.urgency + task.importance) / 2)}%
-              </div>
-            </div>
-          ))}
+            <select
+              value={goal}
+              onChange={(e) => setGoal(e.target.value)}
+              style={styles.select}
+            >
+              <option>Organisation</option>
+              <option>Performance</option>
+              <option>Concentration</option>
+              <option>Gestion du temps</option>
+            </select>
+          </div>
+
+          <div style={styles.questionCard}>
+            <label>Style de travail</label>
+
+            <select
+              value={workStyle}
+              onChange={(e) => setWorkStyle(e.target.value)}
+              style={styles.select}
+            >
+              <option>Structuré</option>
+              <option>Créatif</option>
+              <option>Rapide</option>
+              <option>Flexible</option>
+            </select>
+          </div>
+
+          <div style={styles.questionCard}>
+            <label>Niveau de difficulté</label>
+
+            <select
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+              style={styles.select}
+            >
+              <option>Faible</option>
+              <option>Moyenne</option>
+              <option>Élevée</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section style={styles.bottomGrid}>
+        <div style={styles.bigCard}>
+          <h3>Optimisation détectée</h3>
+
+          <p>
+            Le système ajuste automatiquement les recommandations
+            selon votre concentration, votre énergie et votre profil.
+          </p>
+        </div>
+
+        <div style={styles.bigCard}>
+          <h3>Évolution du système</h3>
+
+          <ul style={styles.list}>
+            <li>✔ Priorisation intelligente</li>
+            <li>✔ Gestion dynamique du temps</li>
+            <li>✔ Adaptation progressive</li>
+            <li>✔ Analyse comportementale</li>
+          </ul>
         </div>
       </section>
     </main>
@@ -130,112 +205,170 @@ function App() {
 const styles: Record<string, React.CSSProperties> = {
   page: {
     minHeight: '100vh',
-    background: 'linear-gradient(135deg, #f7fbff 0%, #eaf4ff 45%, #ffffff 100%)',
-    color: '#061b3a',
+    padding: '50px',
+    background:
+      'linear-gradient(135deg,#f7fbff 0%,#e8f3ff 45%,#ffffff 100%)',
     fontFamily: 'Arial, sans-serif',
-    padding: '56px',
+    color: '#071a3d',
   },
-  hero: {
+
+  header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
+
   logo: {
-    fontSize: '56px',
-    color: '#0b46a0',
+    fontSize: '64px',
     margin: 0,
+    color: '#0b46a0',
+    fontWeight: 900,
   },
-  tagline: {
-    fontSize: '24px',
-    color: '#56708f',
+
+  slogan: {
+    fontSize: '22px',
+    color: '#5b7191',
   },
+
   scoreCard: {
-    background: 'white',
-    borderRadius: '28px',
-    padding: '28px 38px',
-    boxShadow: '0 25px 60px rgba(35, 95, 180, 0.18)',
+    background: '#ffffff',
+    borderRadius: '30px',
+    padding: '28px 40px',
+    boxShadow: '0 20px 60px rgba(40,90,180,0.15)',
   },
-  label: {
-    color: '#52657d',
+
+  scoreLabel: {
     display: 'block',
+    color: '#5c6f8d',
+    marginBottom: '10px',
   },
+
   score: {
-    color: '#d6a720',
-    fontSize: '46px',
+    fontSize: '54px',
+    color: '#d4a61f',
+    fontWeight: 900,
   },
-  center: {
+
+  hero: {
     textAlign: 'center',
-    marginTop: '120px',
+    marginTop: '90px',
   },
+
   badge: {
-    background: 'white',
+    background: '#ffffff',
     padding: '14px 34px',
     borderRadius: '999px',
-    color: '#0b46a0',
     fontWeight: 700,
-    boxShadow: '0 18px 45px rgba(35, 95, 180, 0.14)',
+    color: '#0b46a0',
+    boxShadow: '0 20px 50px rgba(40,90,180,0.12)',
   },
+
   title: {
-    fontSize: '72px',
-    marginBottom: '18px',
+    fontSize: '88px',
+    lineHeight: 1,
+    marginBottom: '20px',
   },
+
   subtitle: {
-    fontSize: '25px',
-    color: '#405b7d',
-    maxWidth: '950px',
+    maxWidth: '1000px',
     margin: '0 auto',
+    fontSize: '28px',
+    color: '#4f6685',
   },
+
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(4, 1fr)',
-    gap: '28px',
+    gridTemplateColumns: 'repeat(4,1fr)',
+    gap: '25px',
     marginTop: '80px',
   },
+
   card: {
-    background: 'white',
+    background: '#ffffff',
     borderRadius: '28px',
-    padding: '32px',
-    minHeight: '170px',
-    boxShadow: '0 25px 60px rgba(35, 95, 180, 0.12)',
+    padding: '30px',
+    boxShadow: '0 20px 60px rgba(40,90,180,0.10)',
   },
+
+  value: {
+    display: 'block',
+    fontSize: '50px',
+    color: '#2f66db',
+    margin: '15px 0',
+  },
+
+  analysis: {
+    fontSize: '22px',
+    color: '#405b7d',
+  },
+
+  active: {
+    color: '#2f66db',
+    fontSize: '44px',
+  },
+
+  small: {
+    color: '#627792',
+  },
+
   panel: {
-    marginTop: '36px',
-    background: 'white',
-    borderRadius: '32px',
-    padding: '34px',
-    boxShadow: '0 25px 70px rgba(35, 95, 180, 0.14)',
+    marginTop: '50px',
+    background: '#ffffff',
+    borderRadius: '30px',
+    padding: '35px',
+    boxShadow: '0 20px 70px rgba(40,90,180,0.10)',
   },
+
   panelHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  button: {
-    border: 'none',
-    borderRadius: '18px',
-    padding: '16px 24px',
-    background: 'linear-gradient(135deg, #2f66db, #102b66)',
-    color: 'white',
+
+  live: {
+    color: '#2f66db',
     fontWeight: 700,
-    cursor: 'pointer',
   },
-  taskList: {
+
+  questionGrid: {
     display: 'grid',
-    gap: '16px',
-    marginTop: '24px',
+    gridTemplateColumns: 'repeat(3,1fr)',
+    gap: '20px',
+    marginTop: '30px',
   },
-  task: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '22px',
+
+  questionCard: {
+    background: '#f5f9ff',
     borderRadius: '22px',
-    background: '#f4f8ff',
+    padding: '24px',
   },
-  miniScore: {
-    color: '#d6a720',
-    fontSize: '28px',
-    fontWeight: 800,
+
+  select: {
+    width: '100%',
+    padding: '14px',
+    borderRadius: '14px',
+    border: '1px solid #d6e2f5',
+    marginTop: '12px',
+    fontSize: '16px',
+  },
+
+  bottomGrid: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: '25px',
+    marginTop: '40px',
+  },
+
+  bigCard: {
+    background: '#ffffff',
+    borderRadius: '30px',
+    padding: '35px',
+    boxShadow: '0 20px 70px rgba(40,90,180,0.10)',
+  },
+
+  list: {
+    lineHeight: 2,
+    fontSize: '20px',
   },
 }
 
