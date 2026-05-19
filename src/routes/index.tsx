@@ -1,159 +1,354 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom/client'
 
 function App() {
-  const [profil, setProfil] = useState('Étudiant')
-  const [objectif, setObjectif] = useState('Organisation')
-  const [energie, setEnergie] = useState(70)
+  const [profile, setProfile] = useState('Étudiant')
+  const [goal, setGoal] = useState('Organisation')
+  const [energy, setEnergy] = useState(70)
   const [focus, setFocus] = useState(75)
 
-  const score = useMemo(() => {
-    return Math.min(99, Math.round((energie + focus + 90) / 3))
-  }, [energie, focus])
+  const getRecommendation = () => {
+    if (profile === 'Étudiant') {
+      return '2 blocs de 45 minutes + révision active.'
+    }
 
-  const conseil = useMemo(() => {
-    if (profil === 'Étudiant') return 'Plan conseillé : 2 blocs de 45 minutes + révision active.'
-    if (profil === 'Commerçant') return 'Plan conseillé : clients, ventes, suivis, puis administration.'
-    if (profil === 'Employé') return 'Plan conseillé : priorités claires + bloc focus sans distraction.'
-    return 'Plan conseillé : objectifs simples, actions courtes et progression quotidienne.'
-  }, [profil])
+    if (profile === 'Entrepreneur') {
+      return 'Prioriser les tâches à impact élevé et automatiser.'
+    }
+
+    if (profile === 'Employé') {
+      return 'Créer des blocs focus sans interruption.'
+    }
+
+    return 'Optimisation quotidienne intelligente.'
+  }
 
   return (
-    <main style={styles.page}>
-      <header style={styles.header}>
+    <main
+      style={{
+        minHeight: '100vh',
+        background:
+          'linear-gradient(135deg, #f5f9ff 0%, #e7f1ff 50%, #ffffff 100%)',
+        color: '#071b3a',
+        fontFamily: 'Arial, sans-serif',
+        paddingBottom: '120px',
+      }}
+    >
+      {/* HEADER */}
+
+      <section
+        style={{
+          padding: '50px 70px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          flexWrap: 'wrap',
+        }}
+      >
         <div>
-          <h1 style={styles.logo}>NexxGuard Pro™</h1>
-          <p style={styles.tagline}>Optimisez votre quotidien. Naturellement.</p>
+          <h1
+            style={{
+              fontSize: '72px',
+              margin: 0,
+              fontWeight: 900,
+              color: '#1242a2',
+            }}
+          >
+            NexxGuard Pro™
+          </h1>
+
+          <p
+            style={{
+              fontSize: '26px',
+              color: '#51698f',
+              marginTop: '20px',
+            }}
+          >
+            Optimisez votre quotidien. Naturellement.
+          </p>
         </div>
 
-        <div style={styles.scoreBox}>
-          <span>SMART SCORE</span>
-          <strong>{score}%</strong>
-        </div>
-      </header>
+        <div
+          style={{
+            background: 'white',
+            borderRadius: '30px',
+            padding: '30px',
+            width: '240px',
+            boxShadow: '0 15px 40px rgba(0,0,0,0.08)',
+          }}
+        >
+          <div
+            style={{
+              color: '#5f7194',
+              fontSize: '18px',
+              marginBottom: '15px',
+            }}
+          >
+            SMART SCORE
+          </div>
 
-      <section style={styles.hero}>
-        <div style={styles.badge}>Dashboard intelligent actif</div>
-        <h2 style={styles.title}>Organisation évolutive personnalisée</h2>
-        <p style={styles.subtitle}>
-          Profilage, recommandations, missions dynamiques et priorisation en temps réel.
-        </p>
+          <div
+            style={{
+              color: '#d1a318',
+              fontSize: '64px',
+              fontWeight: 900,
+            }}
+          >
+            92%
+          </div>
+        </div>
       </section>
 
-      <section style={styles.grid}>
-        <div style={styles.card}>
-          <h3>Profil utilisateur</h3>
-          <select style={styles.input} value={profil} onChange={(e) => setProfil(e.target.value)}>
+      {/* HERO */}
+
+      <section
+        style={{
+          textAlign: 'center',
+          marginTop: '80px',
+          padding: '0 40px',
+        }}
+      >
+        <div
+          style={{
+            display: 'inline-block',
+            padding: '14px 28px',
+            background: 'white',
+            borderRadius: '999px',
+            color: '#1653c7',
+            fontWeight: 700,
+            marginBottom: '40px',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.06)',
+          }}
+        >
+          Système évolutif actif
+        </div>
+
+        <h2
+          style={{
+            fontSize: '92px',
+            lineHeight: 1,
+            maxWidth: '1500px',
+            margin: '0 auto',
+            fontWeight: 900,
+          }}
+        >
+          Nouvelle génération
+          <br />
+          d’organisation intelligente
+        </h2>
+
+        <p
+          style={{
+            maxWidth: '1200px',
+            margin: '50px auto',
+            fontSize: '34px',
+            lineHeight: 1.5,
+            color: '#425d86',
+          }}
+        >
+          Une plateforme évolutive conçue pour améliorer votre concentration,
+          simplifier votre gestion quotidienne et optimiser naturellement vos
+          priorités.
+        </p>
+
+        <button
+          style={{
+            padding: '30px 80px',
+            borderRadius: '30px',
+            border: 'none',
+            fontSize: '36px',
+            fontWeight: 800,
+            color: 'white',
+            cursor: 'pointer',
+            background:
+              'linear-gradient(90deg,#2762ff 0%, #132d6b 100%)',
+            boxShadow: '0 20px 60px rgba(39,98,255,0.35)',
+          }}
+        >
+          Découvrir l’expérience
+        </button>
+      </section>
+
+      {/* DASHBOARD */}
+
+      <section
+        style={{
+          marginTop: '120px',
+          padding: '0 40px',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))',
+          gap: '30px',
+        }}
+      >
+        {/* PROFIL */}
+
+        <div
+          style={{
+            background: 'white',
+            borderRadius: '35px',
+            padding: '40px',
+            boxShadow: '0 15px 40px rgba(0,0,0,0.06)',
+          }}
+        >
+          <h3 style={{ fontSize: '26px' }}>Profil utilisateur</h3>
+
+          <select
+            value={profile}
+            onChange={(e) => setProfile(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '20px',
+              fontSize: '22px',
+              borderRadius: '20px',
+              marginTop: '20px',
+            }}
+          >
             <option>Étudiant</option>
-            <option>Commerçant</option>
-            <option>Employé</option>
             <option>Entrepreneur</option>
+            <option>Employé</option>
+            <option>Créateur</option>
           </select>
         </div>
 
-        <div style={styles.card}>
-          <h3>Objectif principal</h3>
-          <select style={styles.input} value={objectif} onChange={(e) => setObjectif(e.target.value)}>
+        {/* OBJECTIF */}
+
+        <div
+          style={{
+            background: 'white',
+            borderRadius: '35px',
+            padding: '40px',
+            boxShadow: '0 15px 40px rgba(0,0,0,0.06)',
+          }}
+        >
+          <h3 style={{ fontSize: '26px' }}>Objectif principal</h3>
+
+          <select
+            value={goal}
+            onChange={(e) => setGoal(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '20px',
+              fontSize: '22px',
+              borderRadius: '20px',
+              marginTop: '20px',
+            }}
+          >
             <option>Organisation</option>
             <option>Concentration</option>
-            <option>Gestion du temps</option>
+            <option>Performance</option>
             <option>Productivité</option>
-            <option>Ventes</option>
           </select>
         </div>
 
-        <div style={styles.card}>
-          <h3>Énergie : {energie}%</h3>
-          <input type="range" min="0" max="100" value={energie} onChange={(e) => setEnergie(Number(e.target.value))} />
+        {/* ENERGIE */}
+
+        <div
+          style={{
+            background: 'white',
+            borderRadius: '35px',
+            padding: '40px',
+            boxShadow: '0 15px 40px rgba(0,0,0,0.06)',
+          }}
+        >
+          <h3 style={{ fontSize: '26px' }}>
+            Énergie : {energy}%
+          </h3>
+
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={energy}
+            onChange={(e) => setEnergy(Number(e.target.value))}
+            style={{
+              width: '100%',
+              marginTop: '30px',
+            }}
+          />
         </div>
 
-        <div style={styles.card}>
-          <h3>Focus : {focus}%</h3>
-          <input type="range" min="0" max="100" value={focus} onChange={(e) => setFocus(Number(e.target.value))} />
+        {/* FOCUS */}
+
+        <div
+          style={{
+            background: 'white',
+            borderRadius: '35px',
+            padding: '40px',
+            boxShadow: '0 15px 40px rgba(0,0,0,0.06)',
+          }}
+        >
+          <h3 style={{ fontSize: '26px' }}>
+            Focus : {focus}%
+          </h3>
+
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={focus}
+            onChange={(e) => setFocus(Number(e.target.value))}
+            style={{
+              width: '100%',
+              marginTop: '30px',
+            }}
+          />
         </div>
       </section>
 
-      <section style={styles.analysis}>
-        <h2>Analyse personnalisée</h2>
-        <p><strong>Profil :</strong> {profil}</p>
-        <p><strong>Objectif :</strong> {objectif}</p>
-        <p><strong>Recommandation :</strong> {conseil}</p>
-      </section>
+      {/* ANALYSE */}
 
-      <section style={styles.grid}>
-        {['Définir 3 priorités', 'Créer un bloc focus', 'Réduire un chronophage', 'Faire un suivi'].map((m, i) => (
-          <div style={styles.mission} key={m}>
-            <span>Mission {i + 1}</span>
-            <strong>{m}</strong>
-          </div>
-        ))}
+      <section
+        style={{
+          marginTop: '80px',
+          padding: '0 40px',
+        }}
+      >
+        <div
+          style={{
+            background:
+              'linear-gradient(135deg,#1952b1 0%, #0f2f70 100%)',
+            color: 'white',
+            borderRadius: '40px',
+            padding: '60px',
+            boxShadow: '0 25px 80px rgba(0,0,0,0.15)',
+          }}
+        >
+          <h2
+            style={{
+              fontSize: '56px',
+              marginBottom: '40px',
+            }}
+          >
+            Analyse personnalisée
+          </h2>
+
+          <p style={{ fontSize: '30px' }}>
+            <strong>Profil :</strong> {profile}
+          </p>
+
+          <p style={{ fontSize: '30px' }}>
+            <strong>Objectif :</strong> {goal}
+          </p>
+
+          <p style={{ fontSize: '30px' }}>
+            <strong>Recommandation :</strong>{' '}
+            {getRecommendation()}
+          </p>
+
+          <p style={{ fontSize: '30px' }}>
+            <strong>État actuel :</strong>{' '}
+            {energy > 70
+              ? 'Performance élevée'
+              : 'Optimisation recommandée'}
+          </p>
+        </div>
       </section>
     </main>
   )
 }
 
-const styles: Record<string, React.CSSProperties> = {
-  page: {
-    minHeight: '100vh',
-    padding: '48px',
-    fontFamily: 'Arial, sans-serif',
-    background: 'linear-gradient(135deg,#f7fbff,#eaf4ff,#ffffff)',
-    color: '#061b3a',
-  },
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' },
-  logo: { fontSize: 56, color: '#0b4aa2', margin: 0 },
-  tagline: { fontSize: 24, color: '#526b8c' },
-  scoreBox: {
-    background: 'white',
-    padding: '28px 38px',
-    borderRadius: 28,
-    boxShadow: '0 25px 60px rgba(20,80,160,.16)',
-    color: '#526b8c',
-  },
-  hero: { textAlign: 'center', padding: '80px 20px 50px' },
-  badge: {
-    display: 'inline-block',
-    background: 'white',
-    color: '#0b4aa2',
-    padding: '14px 34px',
-    borderRadius: 999,
-    fontWeight: 800,
-  },
-  title: { fontSize: 70, lineHeight: 1.05 },
-  subtitle: { fontSize: 28, color: '#405a7a' },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))',
-    gap: 28,
-    marginTop: 38,
-  },
-  card: {
-    background: 'white',
-    borderRadius: 28,
-    padding: 30,
-    boxShadow: '0 25px 60px rgba(20,80,160,.12)',
-  },
-  input: {
-    width: '100%',
-    padding: 16,
-    borderRadius: 14,
-    border: '1px solid #cfe1f6',
-    fontSize: 18,
-  },
-  analysis: {
-    marginTop: 40,
-    padding: 36,
-    borderRadius: 30,
-    background: '#0b4aa2',
-    color: 'white',
-    fontSize: 20,
-  },
-  mission: {
-    background: 'white',
-    borderRadius: 24,
-    padding: 26,
-    boxShadow: '0 20px 50px rgba(20,80,160,.12)',
-  },
-}
-
-ReactDOM.createRoot(document.getElementById('root')!).render(<App />)
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
