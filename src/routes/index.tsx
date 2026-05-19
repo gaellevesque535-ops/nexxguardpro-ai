@@ -1,201 +1,164 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom/client'
 
 function App() {
-  const [energy, setEnergy] = useState(75)
-  const [focus, setFocus] = useState(68)
+  const [profile, setProfile] = useState('')
+  const [interest, setInterest] = useState('')
+  const [energy, setEnergy] = useState('')
+  const [result, setResult] = useState('')
 
-  const [goal, setGoal] = useState('Organisation')
-  const [workStyle, setWorkStyle] = useState('Structuré')
-  const [difficulty, setDifficulty] = useState('Moyenne')
-
-  const smartScore = useMemo(() => {
-    let base = 70
-
-    if (goal === 'Performance') base += 8
-    if (goal === 'Concentration') base += 5
-
-    if (workStyle === 'Structuré') base += 6
-    if (workStyle === 'Créatif') base += 3
-
-    if (difficulty === 'Faible') base += 8
-    if (difficulty === 'Élevée') base -= 5
-
-    base += energy * 0.08
-    base += focus * 0.08
-
-    return Math.min(99, Math.round(base))
-  }, [goal, workStyle, difficulty, energy, focus])
-
-  const recommendation = useMemo(() => {
-    if (focus < 50) {
-      return 'Réduction des distractions recommandée.'
+  function generatePlan() {
+    if (!profile || !interest || !energy) {
+      setResult('Répondez aux 3 questions pour générer votre optimisation.')
+      return
     }
 
-    if (energy < 45) {
-      return 'Bloc court conseillé avant une tâche importante.'
-    }
-
-    if (goal === 'Performance') {
-      return 'Fenêtre optimale détectée pour une tâche prioritaire.'
-    }
-
-    if (goal === 'Concentration') {
-      return 'Mode focus prolongé recommandé.'
-    }
-
-    return 'Organisation quotidienne optimisée.'
-  }, [goal, focus, energy])
+    setResult(
+      `Profil détecté : ${profile}. Priorité principale : ${interest}. Niveau d’énergie : ${energy}. Recommandation : commencez par une action simple de 25 minutes, classez vos tâches importantes, puis activez une mission quotidienne adaptée.`
+    )
+  }
 
   return (
     <main style={styles.page}>
       <header style={styles.header}>
         <div>
           <h1 style={styles.logo}>NexxGuard Pro™</h1>
-          <p style={styles.slogan}>
-            Optimisez votre quotidien. Naturellement.
-          </p>
+          <p style={styles.tagline}>Optimisez votre quotidien. Naturellement.</p>
         </div>
 
-        <div style={styles.scoreCard}>
+        <div style={styles.scoreBox}>
           <span style={styles.scoreLabel}>SMART SCORE</span>
-          <strong style={styles.score}>{smartScore}%</strong>
+          <strong style={styles.score}>92%</strong>
         </div>
       </header>
 
       <section style={styles.hero}>
-        <span style={styles.badge}>Phase intelligente active</span>
-
-        <h2 style={styles.title}>
-          Nouvelle génération
-          <br />
-          d’organisation évolutive
-        </h2>
-
+        <div style={styles.badge}>Phase intelligente active</div>
+        <h2 style={styles.title}>Nouvelle génération d’organisation intelligente</h2>
         <p style={styles.subtitle}>
-          Analyse comportementale, adaptation du rythme,
-          optimisation dynamique des priorités et assistance active.
+          Une plateforme évolutive conçue pour améliorer votre concentration,
+          simplifier votre gestion quotidienne et optimiser naturellement vos priorités.
         </p>
+        <button style={styles.button}>Découvrir l’expérience</button>
       </section>
 
-      <section style={styles.grid}>
+      <section style={styles.cards}>
         <div style={styles.card}>
-          <h3>Énergie actuelle</h3>
-          <strong style={styles.value}>{energy}%</strong>
-
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={energy}
-            onChange={(e) => setEnergy(Number(e.target.value))}
-          />
+          <h3>SMART Score</h3>
+          <strong>92%</strong>
+          <p>Performance quotidienne estimée</p>
         </div>
 
         <div style={styles.card}>
-          <h3>Concentration</h3>
-          <strong style={styles.value}>{focus}%</strong>
-
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={focus}
-            onChange={(e) => setFocus(Number(e.target.value))}
-          />
+          <h3>Focus actif</h3>
+          <strong>En cours</strong>
+          <p>Priorités analysées en temps réel</p>
         </div>
 
         <div style={styles.card}>
-          <h3>Analyse active</h3>
-
-          <p style={styles.analysis}>
-            {recommendation}
-          </p>
+          <h3>Temps gagné</h3>
+          <strong>+3h</strong>
+          <p>Optimisation hebdomadaire prévue</p>
         </div>
 
         <div style={styles.card}>
-          <h3>Mode système</h3>
-
-          <strong style={styles.active}>Actif</strong>
-
-          <p style={styles.small}>
-            Optimisation en temps réel.
-          </p>
+          <h3>Assistant</h3>
+          <strong>Actif</strong>
+          <p>Guidage personnalisé disponible</p>
         </div>
       </section>
 
-      <section style={styles.panel}>
-        <div style={styles.panelHeader}>
-          <h2>Profil utilisateur</h2>
-          <span style={styles.live}>Analyse en direct</span>
+      <section style={styles.interactive}>
+        <h2 style={styles.sectionTitle}>Profilage personnalisé</h2>
+        <p style={styles.sectionText}>
+          Répondez aux questions pour recevoir une recommandation adaptée à votre profil.
+        </p>
+
+        <div style={styles.formGrid}>
+          <select style={styles.input} value={profile} onChange={(e) => setProfile(e.target.value)}>
+            <option value="">Vous êtes...</option>
+            <option value="Étudiant">Étudiant</option>
+            <option value="Commerçant">Commerçant</option>
+            <option value="Employé">Employé</option>
+            <option value="Entrepreneur">Entrepreneur</option>
+          </select>
+
+          <select style={styles.input} value={interest} onChange={(e) => setInterest(e.target.value)}>
+            <option value="">Votre priorité...</option>
+            <option value="Organisation">Organisation</option>
+            <option value="Productivité">Productivité</option>
+            <option value="Gestion du temps">Gestion du temps</option>
+            <option value="Concentration">Concentration</option>
+            <option value="Planification">Planification</option>
+          </select>
+
+          <select style={styles.input} value={energy} onChange={(e) => setEnergy(e.target.value)}>
+            <option value="">Votre énergie...</option>
+            <option value="Basse">Basse</option>
+            <option value="Moyenne">Moyenne</option>
+            <option value="Haute">Haute</option>
+          </select>
         </div>
 
-        <div style={styles.questionGrid}>
-          <div style={styles.questionCard}>
-            <label>Objectif principal</label>
+        <button style={styles.actionButton} onClick={generatePlan}>
+          Générer mon optimisation
+        </button>
 
-            <select
-              value={goal}
-              onChange={(e) => setGoal(e.target.value)}
-              style={styles.select}
-            >
-              <option>Organisation</option>
-              <option>Performance</option>
-              <option>Concentration</option>
-              <option>Gestion du temps</option>
-            </select>
-          </div>
+        {result && <div style={styles.result}>{result}</div>}
+      </section>
 
-          <div style={styles.questionCard}>
-            <label>Style de travail</label>
+      <section style={styles.steps}>
+        <h2 style={styles.sectionTitle}>Évolution du logiciel</h2>
 
-            <select
-              value={workStyle}
-              onChange={(e) => setWorkStyle(e.target.value)}
-              style={styles.select}
-            >
-              <option>Structuré</option>
-              <option>Créatif</option>
-              <option>Rapide</option>
-              <option>Flexible</option>
-            </select>
-          </div>
-
-          <div style={styles.questionCard}>
-            <label>Niveau de difficulté</label>
-
-            <select
-              value={difficulty}
-              onChange={(e) => setDifficulty(e.target.value)}
-              style={styles.select}
-            >
-              <option>Faible</option>
-              <option>Moyenne</option>
-              <option>Élevée</option>
-            </select>
-          </div>
+        <div style={styles.stepGrid}>
+          <div style={styles.step}>1. Profil utilisateur</div>
+          <div style={styles.step}>2. Analyse des besoins</div>
+          <div style={styles.step}>3. Priorisation SMART</div>
+          <div style={styles.step}>4. Horaire dynamique</div>
+          <div style={styles.step}>5. Missions quotidiennes</div>
+          <div style={styles.step}>6. Suivi de progression</div>
         </div>
       </section>
 
-      <section style={styles.bottomGrid}>
-        <div style={styles.bigCard}>
-          <h3>Optimisation détectée</h3>
+      <section style={styles.advantageSection}>
+        <h2 style={styles.sectionTitle}>Ce qui rend NexxGuard Pro™ différent</h2>
 
-          <p>
-            Le système ajuste automatiquement les recommandations
-            selon votre concentration, votre énergie et votre profil.
-          </p>
-        </div>
+        <div style={styles.advantageGrid}>
+          <div style={styles.advantageCard}>
+            <span style={styles.icon}>⚡</span>
+            <h3>Adaptation en temps réel</h3>
+            <p>Le dashboard évolue selon le profil, l’énergie et les priorités.</p>
+          </div>
 
-        <div style={styles.bigCard}>
-          <h3>Évolution du système</h3>
+          <div style={styles.advantageCard}>
+            <span style={styles.icon}>🎯</span>
+            <h3>Priorisation SMART</h3>
+            <p>Les objectifs deviennent des actions simples, claires et mesurables.</p>
+          </div>
 
-          <ul style={styles.list}>
-            <li>✔ Priorisation intelligente</li>
-            <li>✔ Gestion dynamique du temps</li>
-            <li>✔ Adaptation progressive</li>
-            <li>✔ Analyse comportementale</li>
-          </ul>
+          <div style={styles.advantageCard}>
+            <span style={styles.icon}>🗓️</span>
+            <h3>Horaire dynamique</h3>
+            <p>Préparation d’une feuille d’organisation adaptée aux besoins réels.</p>
+          </div>
+
+          <div style={styles.advantageCard}>
+            <span style={styles.icon}>🏆</span>
+            <h3>Jeu de progression</h3>
+            <p>Missions, score, badges et motivation quotidienne.</p>
+          </div>
+
+          <div style={styles.advantageCard}>
+            <span style={styles.icon}>💼</span>
+            <h3>Multi-profils</h3>
+            <p>Étudiant, commerçant, employé ou entrepreneur.</p>
+          </div>
+
+          <div style={styles.advantageCard}>
+            <span style={styles.icon}>🔒</span>
+            <h3>Simple et sécurisant</h3>
+            <p>L’utilisateur voit une aide claire, sans complexité technique.</p>
+          </div>
         </div>
       </section>
     </main>
@@ -205,175 +168,174 @@ function App() {
 const styles: Record<string, React.CSSProperties> = {
   page: {
     minHeight: '100vh',
-    padding: '50px',
-    background:
-      'linear-gradient(135deg,#f7fbff 0%,#e8f3ff 45%,#ffffff 100%)',
+    background: 'linear-gradient(135deg, #f7fbff 0%, #eaf4ff 45%, #ffffff 100%)',
+    color: '#061b3a',
     fontFamily: 'Arial, sans-serif',
-    color: '#071a3d',
+    padding: '48px 72px',
   },
-
   header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
-
   logo: {
-    fontSize: '64px',
+    fontSize: '56px',
+    color: '#06429b',
     margin: 0,
-    color: '#0b46a0',
-    fontWeight: 900,
   },
-
-  slogan: {
-    fontSize: '22px',
-    color: '#5b7191',
+  tagline: {
+    fontSize: '24px',
+    color: '#536b8a',
   },
-
-  scoreCard: {
-    background: '#ffffff',
-    borderRadius: '30px',
-    padding: '28px 40px',
-    boxShadow: '0 20px 60px rgba(40,90,180,0.15)',
+  scoreBox: {
+    background: '#fff',
+    borderRadius: '24px',
+    padding: '24px 38px',
+    boxShadow: '0 25px 70px rgba(6, 66, 155, 0.15)',
   },
-
   scoreLabel: {
     display: 'block',
-    color: '#5c6f8d',
-    marginBottom: '10px',
+    color: '#536b8a',
+    fontSize: '18px',
   },
-
   score: {
-    fontSize: '54px',
-    color: '#d4a61f',
-    fontWeight: 900,
+    color: '#d6a51d',
+    fontSize: '44px',
   },
-
   hero: {
     textAlign: 'center',
-    marginTop: '90px',
+    marginTop: '110px',
   },
-
   badge: {
-    background: '#ffffff',
+    display: 'inline-block',
+    background: '#fff',
+    color: '#06429b',
     padding: '14px 34px',
     borderRadius: '999px',
     fontWeight: 700,
-    color: '#0b46a0',
-    boxShadow: '0 20px 50px rgba(40,90,180,0.12)',
+    boxShadow: '0 20px 55px rgba(6, 66, 155, 0.12)',
+    marginBottom: '35px',
   },
-
   title: {
-    fontSize: '88px',
-    lineHeight: 1,
-    marginBottom: '20px',
-  },
-
-  subtitle: {
-    maxWidth: '1000px',
+    fontSize: '78px',
+    lineHeight: 1.05,
     margin: '0 auto',
-    fontSize: '28px',
-    color: '#4f6685',
+    maxWidth: '1200px',
   },
-
-  grid: {
+  subtitle: {
+    fontSize: '30px',
+    color: '#405a7a',
+    maxWidth: '1050px',
+    margin: '35px auto',
+    lineHeight: 1.45,
+  },
+  button: {
+    background: 'linear-gradient(135deg, #2f67e8, #132d63)',
+    color: '#fff',
+    border: 0,
+    borderRadius: '24px',
+    padding: '22px 60px',
+    fontSize: '26px',
+    fontWeight: 800,
+    cursor: 'pointer',
+  },
+  cards: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(4,1fr)',
-    gap: '25px',
-    marginTop: '80px',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    gap: '28px',
+    marginTop: '90px',
   },
-
   card: {
+    background: '#fff',
+    borderRadius: '30px',
+    padding: '36px',
+    minHeight: '170px',
+    boxShadow: '0 25px 65px rgba(30, 93, 180, 0.12)',
+  },
+  interactive: {
+    marginTop: '90px',
     background: '#ffffff',
-    borderRadius: '28px',
-    padding: '30px',
-    boxShadow: '0 20px 60px rgba(40,90,180,0.10)',
+    borderRadius: '34px',
+    padding: '45px',
+    boxShadow: '0 30px 80px rgba(6, 66, 155, 0.14)',
   },
-
-  value: {
-    display: 'block',
-    fontSize: '50px',
-    color: '#2f66db',
-    margin: '15px 0',
+  sectionTitle: {
+    fontSize: '42px',
+    color: '#06429b',
+    textAlign: 'center',
   },
-
-  analysis: {
+  sectionText: {
+    textAlign: 'center',
+    color: '#536b8a',
     fontSize: '22px',
-    color: '#405b7d',
   },
-
-  active: {
-    color: '#2f66db',
-    fontSize: '44px',
-  },
-
-  small: {
-    color: '#627792',
-  },
-
-  panel: {
-    marginTop: '50px',
-    background: '#ffffff',
-    borderRadius: '30px',
-    padding: '35px',
-    boxShadow: '0 20px 70px rgba(40,90,180,0.10)',
-  },
-
-  panelHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-
-  live: {
-    color: '#2f66db',
-    fontWeight: 700,
-  },
-
-  questionGrid: {
+  formGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(3,1fr)',
+    gridTemplateColumns: 'repeat(3, 1fr)',
     gap: '20px',
-    marginTop: '30px',
+    marginTop: '35px',
   },
-
-  questionCard: {
-    background: '#f5f9ff',
-    borderRadius: '22px',
-    padding: '24px',
+  input: {
+    padding: '20px',
+    borderRadius: '18px',
+    border: '1px solid #cfe1f7',
+    fontSize: '18px',
   },
-
-  select: {
-    width: '100%',
-    padding: '14px',
-    borderRadius: '14px',
-    border: '1px solid #d6e2f5',
-    marginTop: '12px',
-    fontSize: '16px',
-  },
-
-  bottomGrid: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: '25px',
-    marginTop: '40px',
-  },
-
-  bigCard: {
-    background: '#ffffff',
-    borderRadius: '30px',
-    padding: '35px',
-    boxShadow: '0 20px 70px rgba(40,90,180,0.10)',
-  },
-
-  list: {
-    lineHeight: 2,
+  actionButton: {
+    marginTop: '28px',
+    background: '#06429b',
+    color: '#fff',
+    border: 0,
+    borderRadius: '18px',
+    padding: '18px 36px',
     fontSize: '20px',
+    fontWeight: 700,
+    cursor: 'pointer',
+  },
+  result: {
+    marginTop: '28px',
+    background: '#eef6ff',
+    borderLeft: '6px solid #d6a51d',
+    padding: '24px',
+    borderRadius: '18px',
+    fontSize: '20px',
+    color: '#061b3a',
+  },
+  steps: {
+    marginTop: '90px',
+  },
+  stepGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gap: '22px',
+  },
+  step: {
+    background: '#fff',
+    borderRadius: '24px',
+    padding: '28px',
+    fontSize: '22px',
+    fontWeight: 700,
+    color: '#06429b',
+    boxShadow: '0 20px 60px rgba(6, 66, 155, 0.11)',
+  },
+  advantageSection: {
+    marginTop: '90px',
+  },
+  advantageGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
+    gap: '24px',
+  },
+  advantageCard: {
+    background: 'linear-gradient(180deg, #ffffff 0%, #f3f8ff 100%)',
+    borderRadius: '26px',
+    padding: '30px',
+    boxShadow: '0 25px 65px rgba(30, 93, 180, 0.13)',
+    border: '1px solid rgba(6, 66, 155, 0.08)',
+  },
+  icon: {
+    fontSize: '34px',
   },
 }
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-)
+ReactDOM.createRoot(document.getElementById('root')!).render(<App />)
