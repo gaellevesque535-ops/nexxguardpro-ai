@@ -1,354 +1,207 @@
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom/client'
+import React, { useMemo, useState } from "react";
+import ReactDOM from "react-dom/client";
 
 function App() {
-  const [profile, setProfile] = useState('Étudiant')
-  const [goal, setGoal] = useState('Organisation')
-  const [energy, setEnergy] = useState(70)
-  const [focus, setFocus] = useState(75)
+  const [profil, setProfil] = useState("Étudiant");
+  const [objectif, setObjectif] = useState("Organisation");
+  const [energie, setEnergie] = useState(70);
+  const [focus, setFocus] = useState(75);
+  const [interet, setInteret] = useState("Réussir mes priorités");
 
-  const getRecommendation = () => {
-    if (profile === 'Étudiant') {
-      return '2 blocs de 45 minutes + révision active.'
+  const analyse = useMemo(() => {
+    const score = Math.round((energie + focus) / 2);
+
+    let recommandation = "Plan conseillé : 2 blocs de 45 minutes + révision active.";
+
+    if (profil === "Commerçant") {
+      recommandation = "Plan conseillé : prioriser ventes, suivis clients et tâches à haute valeur.";
     }
 
-    if (profile === 'Entrepreneur') {
-      return 'Prioriser les tâches à impact élevé et automatiser.'
+    if (profil === "Employé") {
+      recommandation = "Plan conseillé : organiser les tâches urgentes, réduire les interruptions et planifier les suivis.";
     }
 
-    if (profile === 'Employé') {
-      return 'Créer des blocs focus sans interruption.'
+    if (energie < 45) {
+      recommandation = "Plan conseillé : réduire la charge, commencer par une tâche simple et prévoir une pause.";
     }
 
-    return 'Optimisation quotidienne intelligente.'
-  }
+    return { score, recommandation };
+  }, [profil, objectif, energie, focus]);
 
   return (
     <main
       style={{
-        minHeight: '100vh',
-        background:
-          'linear-gradient(135deg, #f5f9ff 0%, #e7f1ff 50%, #ffffff 100%)',
-        color: '#071b3a',
-        fontFamily: 'Arial, sans-serif',
-        paddingBottom: '120px',
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #f7fbff 0%, #eaf4ff 45%, #ffffff 100%)",
+        color: "#061b3a",
+        fontFamily: "Arial, sans-serif",
+        padding: "42px",
       }}
     >
-      {/* HEADER */}
-
-      <section
-        style={{
-          padding: '50px 70px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          flexWrap: 'wrap',
-        }}
-      >
+      <header style={{ display: "flex", justifyContent: "space-between", gap: "24px" }}>
         <div>
-          <h1
-            style={{
-              fontSize: '72px',
-              margin: 0,
-              fontWeight: 900,
-              color: '#1242a2',
-            }}
-          >
-            NexxGuard Pro™
-          </h1>
-
-          <p
-            style={{
-              fontSize: '26px',
-              color: '#51698f',
-              marginTop: '20px',
-            }}
-          >
+          <h1 style={{ fontSize: "58px", color: "#06439b" }}>NexxGuard Pro™</h1>
+          <p style={{ fontSize: "26px", color: "#526985" }}>
             Optimisez votre quotidien. Naturellement.
           </p>
         </div>
 
         <div
           style={{
-            background: 'white',
-            borderRadius: '30px',
-            padding: '30px',
-            width: '240px',
-            boxShadow: '0 15px 40px rgba(0,0,0,0.08)',
+            background: "white",
+            borderRadius: "24px",
+            padding: "28px 42px",
+            boxShadow: "0 24px 70px rgba(0, 70, 160, 0.15)",
           }}
         >
-          <div
-            style={{
-              color: '#5f7194',
-              fontSize: '18px',
-              marginBottom: '15px',
-            }}
-          >
-            SMART SCORE
-          </div>
-
-          <div
-            style={{
-              color: '#d1a318',
-              fontSize: '64px',
-              fontWeight: 900,
-            }}
-          >
-            92%
-          </div>
+          <p style={{ fontSize: "20px", color: "#526985" }}>SMART SCORE</p>
+          <strong style={{ fontSize: "48px", color: "#d4a316" }}>{analyse.score}%</strong>
         </div>
-      </section>
+      </header>
 
-      {/* HERO */}
-
-      <section
-        style={{
-          textAlign: 'center',
-          marginTop: '80px',
-          padding: '0 40px',
-        }}
-      >
-        <div
+      <section style={{ textAlign: "center", marginTop: "120px" }}>
+        <span
           style={{
-            display: 'inline-block',
-            padding: '14px 28px',
-            background: 'white',
-            borderRadius: '999px',
-            color: '#1653c7',
-            fontWeight: 700,
-            marginBottom: '40px',
-            boxShadow: '0 10px 30px rgba(0,0,0,0.06)',
+            background: "white",
+            color: "#06439b",
+            padding: "14px 34px",
+            borderRadius: "999px",
+            fontWeight: "bold",
+            boxShadow: "0 20px 50px rgba(0, 70, 160, 0.12)",
           }}
         >
-          Système évolutif actif
-        </div>
+          Dashboard intelligent actif
+        </span>
 
-        <h2
-          style={{
-            fontSize: '92px',
-            lineHeight: 1,
-            maxWidth: '1500px',
-            margin: '0 auto',
-            fontWeight: 900,
-          }}
-        >
-          Nouvelle génération
-          <br />
+        <h2 style={{ fontSize: "78px", marginTop: "55px", lineHeight: "1.05" }}>
+          Nouvelle génération <br />
           d’organisation intelligente
         </h2>
 
-        <p
-          style={{
-            maxWidth: '1200px',
-            margin: '50px auto',
-            fontSize: '34px',
-            lineHeight: 1.5,
-            color: '#425d86',
-          }}
-        >
+        <p style={{ fontSize: "30px", maxWidth: "1100px", margin: "35px auto", color: "#405a78" }}>
           Une plateforme évolutive conçue pour améliorer votre concentration,
-          simplifier votre gestion quotidienne et optimiser naturellement vos
-          priorités.
+          simplifier votre gestion quotidienne et optimiser naturellement vos priorités.
         </p>
-
-        <button
-          style={{
-            padding: '30px 80px',
-            borderRadius: '30px',
-            border: 'none',
-            fontSize: '36px',
-            fontWeight: 800,
-            color: 'white',
-            cursor: 'pointer',
-            background:
-              'linear-gradient(90deg,#2762ff 0%, #132d6b 100%)',
-            boxShadow: '0 20px 60px rgba(39,98,255,0.35)',
-          }}
-        >
-          Découvrir l’expérience
-        </button>
       </section>
-
-      {/* DASHBOARD */}
 
       <section
         style={{
-          marginTop: '120px',
-          padding: '0 40px',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))',
-          gap: '30px',
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: "28px",
+          marginTop: "80px",
         }}
       >
-        {/* PROFIL */}
-
-        <div
-          style={{
-            background: 'white',
-            borderRadius: '35px',
-            padding: '40px',
-            boxShadow: '0 15px 40px rgba(0,0,0,0.06)',
-          }}
-        >
-          <h3 style={{ fontSize: '26px' }}>Profil utilisateur</h3>
-
-          <select
-            value={profile}
-            onChange={(e) => setProfile(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '20px',
-              fontSize: '22px',
-              borderRadius: '20px',
-              marginTop: '20px',
-            }}
-          >
+        <Card title="Profil utilisateur">
+          <select value={profil} onChange={(e) => setProfil(e.target.value)} style={inputStyle}>
             <option>Étudiant</option>
-            <option>Entrepreneur</option>
+            <option>Commerçant</option>
             <option>Employé</option>
-            <option>Créateur</option>
           </select>
-        </div>
+        </Card>
 
-        {/* OBJECTIF */}
-
-        <div
-          style={{
-            background: 'white',
-            borderRadius: '35px',
-            padding: '40px',
-            boxShadow: '0 15px 40px rgba(0,0,0,0.06)',
-          }}
-        >
-          <h3 style={{ fontSize: '26px' }}>Objectif principal</h3>
-
-          <select
-            value={goal}
-            onChange={(e) => setGoal(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '20px',
-              fontSize: '22px',
-              borderRadius: '20px',
-              marginTop: '20px',
-            }}
-          >
+        <Card title="Objectif principal">
+          <select value={objectif} onChange={(e) => setObjectif(e.target.value)} style={inputStyle}>
             <option>Organisation</option>
-            <option>Concentration</option>
-            <option>Performance</option>
             <option>Productivité</option>
+            <option>Concentration</option>
+            <option>Gestion du temps</option>
           </select>
-        </div>
+        </Card>
 
-        {/* ENERGIE */}
+        <Card title={`Énergie : ${energie}%`}>
+          <input type="range" min="0" max="100" value={energie} onChange={(e) => setEnergie(Number(e.target.value))} />
+        </Card>
 
-        <div
-          style={{
-            background: 'white',
-            borderRadius: '35px',
-            padding: '40px',
-            boxShadow: '0 15px 40px rgba(0,0,0,0.06)',
-          }}
-        >
-          <h3 style={{ fontSize: '26px' }}>
-            Énergie : {energy}%
-          </h3>
-
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={energy}
-            onChange={(e) => setEnergy(Number(e.target.value))}
-            style={{
-              width: '100%',
-              marginTop: '30px',
-            }}
-          />
-        </div>
-
-        {/* FOCUS */}
-
-        <div
-          style={{
-            background: 'white',
-            borderRadius: '35px',
-            padding: '40px',
-            boxShadow: '0 15px 40px rgba(0,0,0,0.06)',
-          }}
-        >
-          <h3 style={{ fontSize: '26px' }}>
-            Focus : {focus}%
-          </h3>
-
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={focus}
-            onChange={(e) => setFocus(Number(e.target.value))}
-            style={{
-              width: '100%',
-              marginTop: '30px',
-            }}
-          />
-        </div>
+        <Card title={`Focus : ${focus}%`}>
+          <input type="range" min="0" max="100" value={focus} onChange={(e) => setFocus(Number(e.target.value))} />
+        </Card>
       </section>
-
-      {/* ANALYSE */}
 
       <section
         style={{
-          marginTop: '80px',
-          padding: '0 40px',
+          marginTop: "42px",
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "28px",
         }}
       >
         <div
           style={{
-            background:
-              'linear-gradient(135deg,#1952b1 0%, #0f2f70 100%)',
-            color: 'white',
-            borderRadius: '40px',
-            padding: '60px',
-            boxShadow: '0 25px 80px rgba(0,0,0,0.15)',
+            background: "#0d4fa8",
+            color: "white",
+            padding: "52px",
+            borderRadius: "34px",
           }}
         >
-          <h2
+          <h2 style={{ fontSize: "42px" }}>Analyse personnalisée</h2>
+          <p style={{ fontSize: "28px", marginTop: "28px" }}>
+            <strong>Profil :</strong> {profil}
+          </p>
+          <p style={{ fontSize: "28px", marginTop: "18px" }}>
+            <strong>Objectif :</strong> {objectif}
+          </p>
+          <p style={{ fontSize: "28px", marginTop: "18px" }}>
+            <strong>Recommandation :</strong> {analyse.recommandation}
+          </p>
+        </div>
+
+        <div
+          style={{
+            background: "white",
+            padding: "52px",
+            borderRadius: "34px",
+            boxShadow: "0 24px 70px rgba(0, 70, 160, 0.12)",
+          }}
+        >
+          <h2 style={{ fontSize: "38px", color: "#06439b" }}>Question utilisateur</h2>
+          <p style={{ fontSize: "22px", marginTop: "20px", color: "#405a78" }}>
+            Qu’est-ce que vous voulez améliorer en priorité ?
+          </p>
+
+          <input
+            value={interet}
+            onChange={(e) => setInteret(e.target.value)}
             style={{
-              fontSize: '56px',
-              marginBottom: '40px',
+              ...inputStyle,
+              width: "100%",
+              marginTop: "24px",
             }}
-          >
-            Analyse personnalisée
-          </h2>
+          />
 
-          <p style={{ fontSize: '30px' }}>
-            <strong>Profil :</strong> {profile}
-          </p>
-
-          <p style={{ fontSize: '30px' }}>
-            <strong>Objectif :</strong> {goal}
-          </p>
-
-          <p style={{ fontSize: '30px' }}>
-            <strong>Recommandation :</strong>{' '}
-            {getRecommendation()}
-          </p>
-
-          <p style={{ fontSize: '30px' }}>
-            <strong>État actuel :</strong>{' '}
-            {energy > 70
-              ? 'Performance élevée'
-              : 'Optimisation recommandée'}
+          <p style={{ fontSize: "24px", marginTop: "30px" }}>
+            Résultat proposé : créer un plan adapté autour de{" "}
+            <strong style={{ color: "#d4a316" }}>{interet}</strong>.
           </p>
         </div>
       </section>
     </main>
-  )
+  );
 }
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-)
+function Card({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div
+      style={{
+        background: "white",
+        borderRadius: "28px",
+        padding: "36px",
+        minHeight: "180px",
+        boxShadow: "0 24px 70px rgba(0, 70, 160, 0.12)",
+      }}
+    >
+      <h3 style={{ fontSize: "28px", color: "#06439b", marginBottom: "26px" }}>{title}</h3>
+      {children}
+    </div>
+  );
+}
+
+const inputStyle: React.CSSProperties = {
+  fontSize: "24px",
+  padding: "18px 22px",
+  borderRadius: "18px",
+  border: "1px solid #c8d7ea",
+  background: "#f5f7fb",
+};
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(<App />);
