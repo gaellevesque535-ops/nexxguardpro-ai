@@ -1,12 +1,153 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NexxGuard Pro™</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/routes/index.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexxGuard Pro™</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f7fbff, #eaf4ff, #ffffff);
+      color: #061b3a;
+    }
+    .page { padding: 50px; min-height: 100vh; }
+    .top { display: flex; justify-content: space-between; align-items: flex-start; }
+    h1 { font-size: 58px; color: #0b46a0; margin: 0; }
+    .tagline { font-size: 25px; color: #56708f; }
+    .score {
+      background: white;
+      padding: 28px 42px;
+      border-radius: 28px;
+      box-shadow: 0 25px 60px rgba(20,80,160,.15);
+    }
+    .score strong { color: #d4a51f; font-size: 46px; display: block; }
+    .hero { text-align: center; margin-top: 110px; }
+    .badge {
+      display: inline-block;
+      background: white;
+      color: #0b46a0;
+      padding: 14px 35px;
+      border-radius: 999px;
+      font-weight: bold;
+      box-shadow: 0 18px 45px rgba(20,80,160,.12);
+    }
+    h2 { font-size: 68px; line-height: 1.05; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+      margin-top: 70px;
+    }
+    .card {
+      background: white;
+      padding: 34px;
+      border-radius: 28px;
+      box-shadow: 0 22px 55px rgba(20,80,160,.12);
+    }
+    select, input {
+      width: 100%;
+      padding: 16px;
+      font-size: 20px;
+      border-radius: 16px;
+      border: 1px solid #cbd8ea;
+    }
+    .analyse {
+      margin-top: 50px;
+      background: #0b4fab;
+      color: white;
+      padding: 45px;
+      border-radius: 30px;
+      font-size: 24px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <section class="top">
+      <div>
+        <h1>NexxGuard Pro™</h1>
+        <p class="tagline">Optimisez votre quotidien. Naturellement.</p>
+      </div>
+      <div class="score">
+        SMART SCORE
+        <strong id="score">88%</strong>
+      </div>
+    </section>
+
+    <section class="hero">
+      <span class="badge">Dashboard intelligent actif</span>
+      <h2>Nouvelle génération d’organisation intelligente</h2>
+      <p>Analyse personnalisée, priorisation, questions de profil et recommandations dynamiques.</p>
+    </section>
+
+    <section class="cards">
+      <div class="card">
+        <h3>Profil utilisateur</h3>
+        <select id="profil">
+          <option>Étudiant</option>
+          <option>Commerçant</option>
+          <option>Employé</option>
+          <option>Freelance</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <h3>Objectif principal</h3>
+        <select id="objectif">
+          <option>Organisation</option>
+          <option>Productivité</option>
+          <option>Gestion du temps</option>
+          <option>Priorités</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <h3>Énergie</h3>
+        <input id="energie" type="range" min="0" max="100" value="70">
+      </div>
+
+      <div class="card">
+        <h3>Focus</h3>
+        <input id="focus" type="range" min="0" max="100" value="75">
+      </div>
+    </section>
+
+    <section class="analyse">
+      <h2 style="font-size:42px;">Analyse personnalisée</h2>
+      <p><strong>Profil :</strong> <span id="profilText">Étudiant</span></p>
+      <p><strong>Objectif :</strong> <span id="objectifText">Organisation</span></p>
+      <p><strong>Recommandation :</strong> <span id="reco">2 blocs de 45 minutes + révision active.</span></p>
+    </section>
+  </main>
+
+  <script>
+    const profil = document.getElementById("profil");
+    const objectif = document.getElementById("objectif");
+    const energie = document.getElementById("energie");
+    const focus = document.getElementById("focus");
+
+    function update() {
+      const score = Math.round((Number(energie.value) * 0.45) + (Number(focus.value) * 0.45) + 10);
+      document.getElementById("score").textContent = score + "%";
+      document.getElementById("profilText").textContent = profil.value;
+      document.getElementById("objectifText").textContent = objectif.value;
+
+      let reco = "Plan conseillé : organiser vos priorités en blocs courts.";
+      if (profil.value === "Étudiant") reco = "2 blocs de 45 minutes + révision active.";
+      if (profil.value === "Commerçant") reco = "Prioriser clients, ventes et suivis quotidiens.";
+      if (profil.value === "Employé") reco = "Planifier les tâches clés avant les interruptions.";
+      if (profil.value === "Freelance") reco = "Classer projets, clients et livrables par urgence.";
+
+      document.getElementById("reco").textContent = reco;
+    }
+
+    profil.onchange = update;
+    objectif.onchange = update;
+    energie.oninput = update;
+    focus.oninput = update;
+    update();
+  </script>
+</body>
 </html>
