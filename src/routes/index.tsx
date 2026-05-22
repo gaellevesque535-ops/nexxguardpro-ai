@@ -1,117 +1,97 @@
 import React, { useMemo, useState } from "react";
 import ReactDOM from "react-dom/client";
 
+type Profile = "Étudiant" | "Commerçant" | "Employé" | "Freelance";
+type Goal = "Organisation" | "Vente" | "Études" | "Productivité" | "Relation client";
+
 function App() {
-  const [profil, setProfil] = useState("Étudiant");
-  const [objectif, setObjectif] = useState("Organisation");
-  const [energie, setEnergie] = useState(70);
+  const [profile, setProfile] = useState<Profile>("Étudiant");
+  const [goal, setGoal] = useState<Goal>("Organisation");
+  const [energy, setEnergy] = useState(70);
   const [focus, setFocus] = useState(75);
-  const [interet, setInteret] = useState("Productivité");
+  const [interest, setInterest] = useState("améliorer mon organisation");
 
-  const smartScore = useMemo(() => {
-    let score = Math.round((energie + focus) / 2);
-    if (objectif === "Vente") score += 5;
-    if (interet === "Relation client") score += 5;
-    return Math.min(score, 99);
-  }, [energie, focus, objectif, interet]);
+  const score = useMemo(() => {
+    let base = Math.round((energy + focus) / 2);
+    if (goal === "Vente") base += 6;
+    if (profile === "Étudiant") base += 4;
+    return Math.min(base, 98);
+  }, [energy, focus, profile, goal]);
 
-  const recommandation = useMemo(() => {
-    if (profil === "Étudiant") {
-      return "Plan conseillé : 2 blocs de 45 minutes, révision active et pauses courtes.";
+  const recommendation = useMemo(() => {
+    if (goal === "Vente") {
+      return "Utilise une approche relationnelle : écoute active, reformulation, preuve de valeur, confiance et suivi après contact.";
     }
-    if (profil === "Commerçant") {
-      return "Plan conseillé : prioriser les clients chauds, relances simples et suivi relationnel.";
+    if (goal === "Études") {
+      return "Plan conseillé : 2 blocs de 45 minutes, rappel actif, résumé APA et révision espacée.";
     }
-    return "Plan conseillé : organiser les tâches urgentes, réduire les distractions et optimiser le focus.";
-  }, [profil]);
+    if (goal === "Relation client") {
+      return "Priorise la satisfaction, la clarté, l’empathie, la personnalisation et la fidélisation.";
+    }
+    return "Plan conseillé : priorisation SMART, blocs courts, réduction des distractions et suivi quotidien.";
+  }, [goal]);
 
   return (
     <main
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg,#f7fbff 0%,#eaf4ff 45%,#ffffff 100%)",
+        background: "linear-gradient(135deg, #f7fbff 0%, #eaf4ff 55%, #ffffff 100%)",
         color: "#061b3a",
         fontFamily: "Arial, sans-serif",
-        padding: "60px 70px",
+        padding: "56px",
       }}
     >
-      <header style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+      <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div>
-          <h1 style={{ fontSize: "72px", color: "#0b4aa2", margin: 0 }}>
+          <h1 style={{ fontSize: "68px", color: "#0b46a0", margin: 0 }}>
             NexxGuard Pro™
           </h1>
-          <p style={{ fontSize: "28px", color: "#526b8c" }}>
+          <p style={{ fontSize: "28px", color: "#55708f" }}>
             Optimisez votre quotidien. Naturellement.
           </p>
         </div>
 
-        <div
-          style={{
-            background: "white",
-            padding: "30px 45px",
-            borderRadius: "28px",
-            boxShadow: "0 25px 70px rgba(11,74,162,.15)",
-          }}
-        >
-          <div style={{ fontSize: "20px", color: "#526b8c" }}>SMART SCORE</div>
-          <div style={{ fontSize: "56px", fontWeight: "bold", color: "#d6a419" }}>
-            {smartScore}%
-          </div>
+        <div style={cardSmall}>
+          <p style={{ margin: 0, fontSize: "20px" }}>SMART SCORE</p>
+          <strong style={{ fontSize: "48px", color: "#d5a51d" }}>{score}%</strong>
         </div>
       </header>
 
       <section style={{ textAlign: "center", marginTop: "120px" }}>
-        <div
-          style={{
-            display: "inline-block",
-            background: "white",
-            padding: "18px 60px",
-            borderRadius: "999px",
-            color: "#0b4aa2",
-            fontWeight: "bold",
-            fontSize: "22px",
-            boxShadow: "0 20px 60px rgba(11,74,162,.12)",
-          }}
-        >
-          Dashboard intelligent actif
-        </div>
+        <div style={pill}>Dashboard intelligent actif</div>
 
-        <h2 style={{ fontSize: "82px", lineHeight: 1.05, marginTop: "70px" }}>
+        <h2 style={{ fontSize: "72px", lineHeight: 1.05, marginTop: "70px" }}>
           Nouvelle génération <br /> d’organisation intelligente
         </h2>
 
-        <p style={{ fontSize: "26px", color: "#314866" }}>
-          Analyse personnalisée, profil utilisateur, priorisation, recommandations et stimulation dynamique.
+        <p style={{ fontSize: "26px", color: "#435b78", maxWidth: "1100px", margin: "0 auto" }}>
+          Analyse personnalisée, priorisation, questions de profil, recommandations dynamiques,
+          stratégies psychologiques en vente et relation client.
         </p>
       </section>
 
-      <section
-        style={{
-          marginTop: "90px",
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "28px",
-        }}
-      >
+      <section style={grid}>
         <Card title="Profil utilisateur">
-          <select value={profil} onChange={(e) => setProfil(e.target.value)} style={inputStyle}>
+          <select style={input} value={profile} onChange={(e) => setProfile(e.target.value as Profile)}>
             <option>Étudiant</option>
             <option>Commerçant</option>
             <option>Employé</option>
+            <option>Freelance</option>
           </select>
         </Card>
 
         <Card title="Objectif principal">
-          <select value={objectif} onChange={(e) => setObjectif(e.target.value)} style={inputStyle}>
+          <select style={input} value={goal} onChange={(e) => setGoal(e.target.value as Goal)}>
             <option>Organisation</option>
-            <option>Productivité</option>
             <option>Vente</option>
+            <option>Études</option>
+            <option>Productivité</option>
             <option>Relation client</option>
           </select>
         </Card>
 
-        <Card title={`Énergie : ${energie}%`}>
-          <input type="range" min="0" max="100" value={energie} onChange={(e) => setEnergie(Number(e.target.value))} />
+        <Card title={`Énergie : ${energy}%`}>
+          <input type="range" min="0" max="100" value={energy} onChange={(e) => setEnergy(Number(e.target.value))} />
         </Card>
 
         <Card title={`Focus : ${focus}%`}>
@@ -119,96 +99,77 @@ function App() {
         </Card>
       </section>
 
-      <section
-        style={{
-          marginTop: "55px",
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "32px",
-        }}
-      >
-        <div
-          style={{
-            background: "linear-gradient(135deg,#0b4aa2,#133b78)",
-            color: "white",
-            borderRadius: "34px",
-            padding: "45px",
-            boxShadow: "0 30px 80px rgba(11,74,162,.25)",
-          }}
-        >
-          <h2 style={{ fontSize: "42px" }}>Analyse personnalisée</h2>
-          <p style={{ fontSize: "24px" }}><strong>Profil :</strong> {profil}</p>
-          <p style={{ fontSize: "24px" }}><strong>Objectif :</strong> {objectif}</p>
-          <p style={{ fontSize: "24px" }}><strong>Intérêt :</strong> {interet}</p>
-          <p style={{ fontSize: "24px" }}><strong>Recommandation :</strong> {recommandation}</p>
-        </div>
+      <section style={bluePanel}>
+        <h2 style={{ fontSize: "44px" }}>Analyse personnalisée</h2>
+        <p><strong>Profil :</strong> {profile}</p>
+        <p><strong>Objectif :</strong> {goal}</p>
+        <p><strong>Intérêt :</strong> {interest}</p>
+        <p><strong>Recommandation :</strong> {recommendation}</p>
+      </section>
 
-        <Card title="Question dynamique">
-          <p style={{ fontSize: "22px" }}>Quel domaine voulez-vous optimiser en priorité ?</p>
-          <select value={interet} onChange={(e) => setInteret(e.target.value)} style={inputStyle}>
-            <option>Productivité</option>
-            <option>Études</option>
-            <option>Vente</option>
-            <option>Relation client</option>
-            <option>Gestion du temps</option>
-          </select>
+      <section style={grid}>
+        <Card title="Question utilisateur">
+          <p>Quel est votre besoin principal aujourd’hui ?</p>
+          <input
+            style={input}
+            value={interest}
+            onChange={(e) => setInterest(e.target.value)}
+            placeholder="Ex : mieux gérer mon horaire"
+          />
+        </Card>
+
+        <Card title="Processus d’accès aux données pertinentes">
+          <ul>
+            <li>1. Profil utilisateur</li>
+            <li>2. Objectif principal</li>
+            <li>3. Niveau d’énergie</li>
+            <li>4. Niveau de focus</li>
+            <li>5. Intérêts et contexte</li>
+            <li>6. Analyse personnalisée</li>
+          </ul>
+        </Card>
+
+        <Card title="Stratégies psychologiques en vente">
+          <ul>
+            <li>Écoute active</li>
+            <li>Reformulation</li>
+            <li>Preuve sociale</li>
+            <li>Réciprocité</li>
+            <li>Création de confiance</li>
+            <li>Suivi après contact</li>
+          </ul>
+        </Card>
+
+        <Card title="Relation client">
+          <ul>
+            <li>Satisfaction client</li>
+            <li>Fidélisation</li>
+            <li>Communication claire</li>
+            <li>Gestion émotionnelle</li>
+            <li>Service après-vente</li>
+          </ul>
         </Card>
       </section>
 
-      <section
-        style={{
-          marginTop: "70px",
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "30px",
-        }}
-      >
-        <Card title="Stratégies psychologiques en vente">
-          {[
-            "Créer la confiance avant de proposer une solution.",
-            "Identifier les besoins réels avec des questions ouvertes.",
-            "Valoriser le bénéfice concret pour le client.",
-            "Réduire l’hésitation avec une recommandation claire.",
-            "Fidéliser avec un suivi humain et professionnel.",
-          ].map((item) => (
-            <p key={item} style={{ fontSize: "21px" }}>✓ {item}</p>
-          ))}
-        </Card>
+      <section style={bluePanel}>
+        <h2 style={{ fontSize: "42px" }}>APA universitaire — psychologie américaine</h2>
+        <p>
+          Module d’aide académique pour structurer les idées selon les normes APA 7 :
+          auteur, année, citation, référence, cadre théorique et analyse psychologique.
+        </p>
 
-        <div
-          style={{
-            background: "white",
-            borderRadius: "32px",
-            padding: "42px",
-            boxShadow: "0 25px 70px rgba(11,74,162,.12)",
-          }}
-        >
-          <h2 style={{ fontSize: "38px", color: "#0b4aa2" }}>
-            Relation client intelligente
-          </h2>
+        <p>
+          Exemple : Le comportement d’achat est influencé par les émotions,
+          la perception de valeur et la confiance envers la marque (Solomon, 2020).
+        </p>
 
-          <p style={{ fontSize: "22px", color: "#314866" }}>
-            Le système adapte les recommandations selon le profil, l’énergie, le focus,
-            l’objectif et l’intérêt principal de l’utilisateur.
-          </p>
-
-          <div style={{ marginTop: "25px", display: "grid", gap: "15px" }}>
-            {["Écoute active", "Communication claire", "Confiance", "Fidélisation", "Suivi personnalisé"].map((x) => (
-              <div
-                key={x}
-                style={{
-                  background: "#f4f8ff",
-                  padding: "18px",
-                  borderRadius: "18px",
-                  fontWeight: "bold",
-                  color: "#133b78",
-                }}
-              >
-                {x}
-              </div>
-            ))}
-          </div>
-        </div>
+        <ul>
+          <li>Comportement du consommateur</li>
+          <li>Motivation et émotion</li>
+          <li>Influence sociale</li>
+          <li>Psychologie d’achat</li>
+          <li>Relation client moderne</li>
+        </ul>
       </section>
     </main>
   );
@@ -216,27 +177,61 @@ function App() {
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div
-      style={{
-        background: "white",
-        borderRadius: "32px",
-        padding: "36px",
-        boxShadow: "0 25px 70px rgba(11,74,162,.10)",
-        minHeight: "190px",
-      }}
-    >
-      <h3 style={{ fontSize: "28px", color: "#061b3a" }}>{title}</h3>
-      {children}
+    <div style={card}>
+      <h3 style={{ fontSize: "28px", color: "#0b46a0" }}>{title}</h3>
+      <div style={{ fontSize: "22px", lineHeight: 1.5 }}>{children}</div>
     </div>
   );
 }
 
-const inputStyle: React.CSSProperties = {
+const card = {
+  background: "white",
+  borderRadius: "34px",
+  padding: "36px",
+  boxShadow: "0 24px 60px rgba(37, 99, 235, 0.12)",
+};
+
+const cardSmall = {
+  background: "white",
+  borderRadius: "32px",
+  padding: "34px 58px",
+  boxShadow: "0 24px 60px rgba(37, 99, 235, 0.16)",
+};
+
+const grid = {
+  display: "grid",
+  gridTemplateColumns: "repeat(4, minmax(220px, 1fr))",
+  gap: "32px",
+  marginTop: "90px",
+};
+
+const input = {
   width: "100%",
   padding: "18px",
   borderRadius: "18px",
-  border: "1px solid #c8d7ef",
+  border: "1px solid #c9d8ef",
   fontSize: "22px",
+};
+
+const pill = {
+  display: "inline-block",
+  background: "white",
+  color: "#0b46a0",
+  padding: "18px 58px",
+  borderRadius: "999px",
+  fontWeight: "bold",
+  fontSize: "22px",
+  boxShadow: "0 18px 50px rgba(37, 99, 235, 0.14)",
+};
+
+const bluePanel = {
+  marginTop: "70px",
+  background: "linear-gradient(135deg, #0b46a0, #1558c8)",
+  color: "white",
+  borderRadius: "36px",
+  padding: "48px",
+  fontSize: "24px",
+  lineHeight: 1.6,
 };
 
 ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
